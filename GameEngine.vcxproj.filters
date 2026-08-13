@@ -48,6 +48,9 @@
     <ClInclude Include="include\even_bus.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\player.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">

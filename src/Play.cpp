@@ -7,6 +7,8 @@ namespace skibidi
     void Play::onEnter()
     {
         TraceLog(LOG_INFO, "Entrando a Play");
+
+		//listen("grab_coin");
     }
 
     void Play::onExit()
@@ -16,7 +18,18 @@ namespace skibidi
 
     void Play::Update()
     {
+        if (IsKeyPressed(KEY_C))
+        {
+			//player.GrabCoin();
+		}
+        if (IsKeyPressed(KEY_BACKSPACE))
+        {
 
+		}
+        if (IsKeyPressed(KEY_SPACE))
+        {
+
+		}
     }
 
     void Play::Draw()
@@ -37,4 +50,23 @@ namespace skibidi
             WHITE
         );
     }
+
+    /*void Play::onEvent(EventData data)
+    {
+        if (data.type == "grab_coin")
+        {
+            playerScore += 10;
+            TraceLog(LOG_INFO, "Moneda recogida! Puntuación: %d", playerScore);
+        }
+        else if (data.type == "enemy_hit")
+        {
+            playerScore -= 5;
+            TraceLog(LOG_INFO, "Golpeado por un enemigo! Puntuación: %d", playerScore);
+        }
+        else if (data.type == "player_hit")
+        {
+            playerScore -= data.intVal;
+            TraceLog(LOG_INFO, "Jugador golpeado! Puntuación: %d", playerScore);
+        }
+	}*/
 }

@@ -11,6 +11,7 @@ namespace skibidi
 		virtual void onExit() = 0;
 		virtual void Update() = 0;
 		virtual void Draw() = 0;
+		//virtual void onEvent(struct EventData data) {} // Añadido para permitir override
 
 	};
 }
