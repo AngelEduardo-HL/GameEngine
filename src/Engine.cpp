@@ -1,95 +1,98 @@
-#include "raylib.h"
-#include "resource_dir.h"	// utility header for SearchAndSetResourceDir
-
 #include "Engine.hpp"
-#include "Circle.hpp"
+
+#include "raylib.h"
+#include "resource_dir.h"
 
 namespace skibidi
 {
+    Engine::Engine()
+    {
 
-	Engine::Engine()
-	{
+    }
 
-	}
+    Engine::~Engine()
+    {
 
-	Engine::~Engine()
-	{
+    }
 
-	}
+    void Engine::Init()
+    {
+        SetConfigFlags(
+            FLAG_VSYNC_HINT |
+            FLAG_WINDOW_HIGHDPI
+        );
 
-	void Engine::Init()
-	{
-		// Tell the window to use vsync and work on high DPI displays
-		SetConfigFlags(FLAG_VSYNC_HINT | FLAG_WINDOW_HIGHDPI);
+        InitWindow(
+            screenWidth,
+            screenHeight,
+            "Game Engine"
+        );
 
-		// Create the window and OpenGL context
-		InitWindow(screenHeight, screenWidth, "Hello Raylib");
-		TraceLog(LOG_INFO, "Se creo chido rey");
+        SearchAndSetResourceDir("resources");
 
-		// Utility function from resource_dir.h to find the resources folder and set it as the current working directory so we can load from it
-		SearchAndSetResourceDir("resources");
+        // Comenzamos en Menu
+        sceneManager.changeScene(&menu);
 
-		sceneManager.changeScene(&menu); //Copia la dirección de memoria del menu y la pasa a sceneManager
+        TraceLog(
+            LOG_INFO,
+            "Game Engine iniciado"
+        );
+    }
 
-		menu.onEnter();
+    void Engine::run()
+    {
+        while (!WindowShouldClose())
+        {
+            Update();
+            Draw();
+        }
+    }
 
-		Circle circle(100, 100, 50, 40, 20, RED);
-		TraceLog(LOG_INFO, "Si se seteo el circculo");
+    void Engine::Update()
+    {
+        // Actualiza solamente la escena actual
+        sceneManager.Update();
 
-		// Load a texture from the resources directory
-		Texture wabbit = LoadTexture("wabbit_alpha.png");
+        // SPACE cambia a Play
+        if (IsKeyPressed(KEY_SPACE))
+        {
+            sceneManager.changeScene(&play);
 
-	}
+            TraceLog(
+                LOG_INFO,
+                "Cambio a Play"
+            );
+        }
 
-	void Engine::run()
-	{
-		// game loop
-		while (!WindowShouldClose())		// run the loop until the user presses ESCAPE or presses the Close button on the window
-		{
-			Update();	// update the game logic
-			Draw();		// draw the game
-		}
-	}
+        // BACKSPACE regresa al Menu
+        if (IsKeyPressed(KEY_BACKSPACE))
+        {
+            sceneManager.changeScene(&menu);
 
-	void Engine::Update()
-	{
-		//Hace el upadte
-		menu.Update();
-		sceneManager.Update();
+            TraceLog(
+                LOG_INFO,
+                "Cambio a Menu"
+            );
+        }
+    }
 
-		if(IsKeyPressed(KEY_SPACE))
-		{
-			sceneManager.changeScene(&play);
-			TraceLog(LOG_INFO, "Cambio de Scene");
-		}
-		if(IsKeyPressed(KEY_M))
-		{
-			sceneManager.changeScene(&menu);
-			TraceLog(LOG_INFO, "Cambio a menu");
-		}
-	}
+    void Engine::Draw()
+    {
+        BeginDrawing();
 
-	void Engine::Draw()
-	{
-		//Update y Draw
-		// drawing
-		BeginDrawing();
+        ClearBackground(BLACK);
 
-		sceneManager.Draw();
-		menu.Draw();
+        // Dibuja solamente la escena actual
+        sceneManager.Draw();
 
-		// end the frame and get ready for the next one  (display frame, poll input, etc...)
-		EndDrawing();
-	}
+        EndDrawing();
+    }
 
-	void Engine::Shutdown()
-	{
-		//Cierra el juego
-		// destroy the window and cleanup the OpenGL context
-		UnloadTexture(wabbit);
+    void Engine::Shutdown()
+    {
+        // Ejecuta onExit de la escena actual
+        sceneManager.changeScene(nullptr);
 
-		menu.onExit();
-
-		CloseWindow();
-	}
+        CloseWindow();
+    }
 }

@@ -301,8 +301,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="include\Canvas.hpp" />
     <ClInclude Include="include\Circle.hpp" />
     <ClInclude Include="include\Engine.hpp" />
+    <ClInclude Include="include\GameGUI.hpp" />
     <ClInclude Include="include\Menu.hpp" />
     <ClInclude Include="include\Play.hpp" />
     <ClInclude Include="include\resource_dir.h" />

@@ -1,18 +1,19 @@
 #include "Circle.hpp"
-#include <algorithm>
-#include "Engine.hpp"
 
-Circle::Circle(float x, float y, float radius, float velx, float vely, Color color)
+Circle::Circle(
+    float x,
+    float y,
+    float radius,
+    float velx,
+    float vely,
+    Color color
+)
 {
-    float screenWidth = static_cast<float>(GetScreenWidth());
-    float screenHeight = static_cast<float>(GetScreenHeight());
+    position = { x, y };
+    velocity = { velx, vely };
 
-    position = Vector2{ x, y };
-    velocity = Vector2{ velx, vely };
     this->radius = radius;
     this->color = color;
-
-    CollisionCircle(screenWidth, screenHeight);
 }
 
 void Circle::Update(float dt)
@@ -20,7 +21,10 @@ void Circle::Update(float dt)
     position.x += velocity.x * dt;
     position.y += velocity.y * dt;
 
-    CollisionCircle(static_cast<float>(GetScreenWidth()), static_cast<float>(GetScreenHeight()));
+    CollisionCircle(
+        static_cast<float>(GetScreenWidth()),
+        static_cast<float>(GetScreenHeight())
+    );
 }
 
 void Circle::Draw() const
@@ -30,35 +34,66 @@ void Circle::Draw() const
 
 void Circle::CollisionCircle(float screenWidth, float screenHeight)
 {
-	//Izquierda y derecha
-    if (position.x - radius < 0)
+    // Izquierda
+    if (position.x - radius <= 0)
     {
         position.x = radius;
         velocity.x *= -1;
 
-		TraceLog(LOG_INFO, "Skibidi pego izquierda");
+        ChangeColor();
+
+        //TraceLog(LOG_INFO, "La pelota pego a la izquierda");
     }
-    else if (position.x + radius > screenWidth)
+
+    // Derecha
+    else if (position.x + radius >= screenWidth)
     {
         position.x = screenWidth - radius;
         velocity.x *= -1;
 
-		TraceLog(LOG_INFO, "Skibidi pego derecha");
+        ChangeColor();
+
+        //TraceLog(LOG_INFO, "La pelota pego a la derecha");
     }
 
-	//Arriba y abajo
-    if (position.y - radius < 0)
+    // Arriba
+    if (position.y - radius <= 0)
     {
         position.y = radius;
         velocity.y *= -1;
 
-		TraceLog(LOG_INFO, "Skibidi pego arriba");
+        ChangeColor();
+
+        //TraceLog(LOG_INFO, "La pelota pego arriba");
     }
-    else if (position.y + radius > screenHeight)
+
+    // Abajo
+    else if (position.y + radius >= screenHeight)
     {
         position.y = screenHeight - radius;
         velocity.y *= -1;
 
-		TraceLog(LOG_INFO, "Skibidi pego abajo");
-	}
+        ChangeColor();
+
+        //TraceLog(LOG_INFO, "La pelota pego abajo");
+    }
+}
+
+void Circle::ChangeColor()
+{
+    Color colors[] =
+    {
+        PINK,
+        SKYBLUE,
+        BEIGE,
+        YELLOW,
+        VIOLET,
+        ORANGE,
+        MAGENTA,
+        LIME
+    };
+
+    int randomColor = GetRandomValue(0, 7);
+
+    color = colors[randomColor];
 }

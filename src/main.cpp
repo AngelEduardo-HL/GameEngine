@@ -7,14 +7,19 @@ by Jeffery Myers is marked with CC0 1.0. To view a copy of this license, visit h
 
 */
 
+#define RAYGUI_IMPLEMENTATION
+#include "raygui.h"
+
 #include "raylib.h"
 #include "Engine.hpp"
 
-int main ()
+int main()
 {
-	skibidi::Engine engine;
-	engine.Init();
-	engine.run();
-	engine.Shutdown();
-	return 0;
+    skibidi::Engine engine;
+
+    engine.Init();
+    engine.run();
+    engine.Shutdown();
+
+    return 0;
 }

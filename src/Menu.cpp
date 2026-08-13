@@ -1,37 +1,53 @@
 #include "Menu.hpp"
+
 #include "raylib.h"
 
 namespace skibidi
 {
-	void Menu::onEnter()
-	{
+    void Menu::onEnter()
+    {
+        TraceLog(LOG_INFO, "Entrando al Menu");
+    }
 
-	}
+    void Menu::onExit()
+    {
+        TraceLog(LOG_INFO, "Saliendo del Menu");
+    }
 
-	void Menu::onExit()
-	{
-	}
+    void Menu::Update()
+    {
+        // Movimiento de la pelota
+        circle.Update(GetFrameTime());
 
-	void Menu::Update()
-	{
-	}
+        // Muestra u oculta el menu GUI
+        if (IsKeyPressed(KEY_M))
+        {
+            menuGUI.toggle();
+        }
+    }
 
-	void Menu::Draw()
-	{
-		// Setup the back buffer for drawing (clear color and depth buffers)
-		ClearBackground(BLACK);
+    void Menu::Draw()
+    {
+        DrawText(
+            "MENU",
+            350,
+            40,
+            30,
+            WHITE
+        );
 
-		// draw some text using the default font
-		DrawText("Hello Raylib", 200, 200, 20, WHITE);
+        DrawText(
+            "M = Mostrar/Ocultar GUI",
+            20,
+            550,
+            20,
+            LIGHTGRAY
+        );
 
-		// draw our texture to the screen
-		DrawCircle(400, 200, 50, RED);
+        // Pelota
+        circle.Draw();
 
-		// Update the circle's position based on its velocity and delta time
-		//circle.Update(GetFrameTime());
-
-		// Draw the circle to the screen
-		//circle.Draw();
-		//TraceLog(LOG_INFO, "Se dibuja el circulo!!");
-	}
+        // Interfaz
+        menuGUI.draw();
+    }
 }
