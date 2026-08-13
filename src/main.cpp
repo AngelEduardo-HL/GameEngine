@@ -7,11 +7,11 @@ by Jeffery Myers is marked with CC0 1.0. To view a copy of this license, visit h
 
 */
 
-#define RAYGUI_IMPLEMENTATION
-#include "raygui.h"
-
 #include "raylib.h"
 #include "Engine.hpp"
+
+#define RAYGUI_IMPLEMENTATION
+#include "raygui.h"
 
 int main()
 {
