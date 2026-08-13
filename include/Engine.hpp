@@ -9,9 +9,11 @@
 #include "Scene.hpp"
 #include "scene_manager.hpp"
 
+#include "even_bus.hpp"
+
 namespace skibidi
 {
-    class Engine
+    class Engine : public EventListener
     {
     public:
 
@@ -25,6 +27,9 @@ namespace skibidi
         void Draw();
 
         void Shutdown();
+
+        // Recibe los eventos
+        void onEvent(EventData data) override;
 
     private:
 

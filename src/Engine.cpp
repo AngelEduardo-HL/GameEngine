@@ -7,7 +7,8 @@ namespace skibidi
 {
     Engine::Engine()
     {
-
+        // Engine escucha el evento start_game
+        listen("start_game");
     }
 
     Engine::~Engine()
@@ -28,10 +29,14 @@ namespace skibidi
             "Game Engine"
         );
 
-        SearchAndSetResourceDir("resources");
+        SearchAndSetResourceDir(
+            "resources"
+        );
 
-        // Comenzamos en Menu
-        sceneManager.changeScene(&menu);
+        // Empezamos en Menu
+        sceneManager.changeScene(
+            &menu
+        );
 
         TraceLog(
             LOG_INFO,
@@ -53,25 +58,31 @@ namespace skibidi
         // Actualiza solamente la escena actual
         sceneManager.Update();
 
-        // SPACE cambia a Play
+
+        // SPACE sigue funcionando como acceso rapido
         if (IsKeyPressed(KEY_SPACE))
         {
-            sceneManager.changeScene(&play);
+            sceneManager.changeScene(
+                &play
+            );
 
             TraceLog(
                 LOG_INFO,
-                "Cambio a Play"
+                "Cambio a Play con SPACE"
             );
         }
 
-        // BACKSPACE regresa al Menu
+
+        // BACKSPACE vuelve al menu
         if (IsKeyPressed(KEY_BACKSPACE))
         {
-            sceneManager.changeScene(&menu);
+            sceneManager.changeScene(
+                &menu
+            );
 
             TraceLog(
                 LOG_INFO,
-                "Cambio a Menu"
+                "Regreso al Menu"
             );
         }
     }
@@ -82,7 +93,6 @@ namespace skibidi
 
         ClearBackground(BLACK);
 
-        // Dibuja solamente la escena actual
         sceneManager.Draw();
 
         EndDrawing();
@@ -90,9 +100,32 @@ namespace skibidi
 
     void Engine::Shutdown()
     {
-        // Ejecuta onExit de la escena actual
-        sceneManager.changeScene(nullptr);
+        sceneManager.changeScene(
+            nullptr
+        );
 
         CloseWindow();
+    }
+
+    void Engine::onEvent(EventData data)
+    {
+        // Comprobamos que evento recibimos
+        if (data.type == "start_game")
+        {
+            TraceLog(
+                LOG_INFO,
+                "EVENTO RECIBIDO: start_game"
+            );
+
+            TraceLog(
+                LOG_INFO,
+                "Cambiando de Menu a Play..."
+            );
+
+            // El evento cambia la escena
+            sceneManager.changeScene(
+                &play
+            );
+        }
     }
 }
