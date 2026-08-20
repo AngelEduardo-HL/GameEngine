@@ -1,18 +1,23 @@
 #include "Menu.hpp"
 
 #include "raylib.h"
+
 #include "scene_manager.hpp"
+
 
 namespace skibidi
 {
     Menu::Menu()
     {
-        listen("start_game");
+        listen(
+            "start_game"
+        );
     }
 
 
     void Menu::OnInit()
     {
+        // Mostrar GUI al iniciar Menu
         menuGUI.show();
     }
 
@@ -28,11 +33,14 @@ namespace skibidi
 
     void Menu::Update()
     {
-        circle.Update(
-            GetFrameTime()
+        // Movimiento de la pelota
+        circles.MoveCircle(
+            GetScreenWidth(),
+            GetScreenHeight()
         );
 
 
+        // Mostrar u ocultar GUI
         if (IsKeyPressed(KEY_M))
         {
             menuGUI.toggle();
@@ -60,9 +68,12 @@ namespace skibidi
         );
 
 
-        circle.Draw();
-
+        // GUI
         menuGUI.draw();
+
+
+        // Pelota
+        circles.DrawCircle();
     }
 
 
@@ -85,6 +96,7 @@ namespace skibidi
                 LOG_INFO,
                 "Evento start_game recibido"
             );
+
 
             SceneManager::get().changeScene(
                 "play"

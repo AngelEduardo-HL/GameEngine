@@ -29,6 +29,8 @@ namespace skibidi
 
     void Play::Update()
     {
+		ship.update();
+
         // Recoger moneda
         if (IsKeyPressed(KEY_C))
         {
@@ -62,6 +64,8 @@ namespace skibidi
 
     void Play::Draw()
     {
+		ship.draw();
+
         DrawText(
             "PLAY",
             350,

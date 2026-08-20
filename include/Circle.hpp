@@ -7,7 +7,7 @@ class Circle
 public:
 
     Circle();
-    ~Circle() = default;
+    ~Circle();
 
     void DrawCircle();
 

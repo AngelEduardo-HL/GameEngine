@@ -4,6 +4,7 @@
 #include "Scene.hpp"
 #include "EventBus.hpp"
 #include "player.hpp"
+#include "ship.h"
 
 namespace skibidi
 {
@@ -36,6 +37,7 @@ namespace skibidi
 
 
         Player player;
+		Ship ship;
 
         int eventId_01 = 0;
         int eventId_02 = 0;
