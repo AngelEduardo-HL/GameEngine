@@ -4,13 +4,13 @@
 class Ship : public Entity {
 public:
 
-	float speed = 25.0f;
+	float speed = 65.0f;
 
 	Ship() {
 		name = "Ship";
 		active = true;
 		position = { 400.0f, 300.0f };
-		texture = LoadTexture("resources/546Crusier.png");
+		texture = LoadTexture("546Crusier.png");
 	}
 
 	~Ship() {
@@ -37,7 +37,7 @@ public:
 
 	void draw() override {
 
-		if (!isActive() || texture.id != 0) {
+		if (!isActive() || texture.id == 0) {
 			return;
 		}
 		DrawTexture(texture, position.x, position.y, WHITE);
