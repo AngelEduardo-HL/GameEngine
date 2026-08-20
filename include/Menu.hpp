@@ -1,10 +1,10 @@
-#pragma once
+#ifndef SKIBIDI_MENU_HPP
+#define SKIBIDI_MENU_HPP
 
 #include "Scene.hpp"
 #include "Circle.hpp"
 #include "kai_gui.hpp"
 #include "EventBus.hpp"
-
 
 namespace skibidi
 {
@@ -16,11 +16,17 @@ namespace skibidi
 
         MenuGUI menuGUI;
 
+        Circle circle
+        {
+            400.0f,
+            300.0f,
+            30.0f,
+            200.0f,
+            150.0f,
+            PINK
+        };
 
     public:
-
-        Circle circles;
-
 
         Menu();
         ~Menu() override = default;
@@ -40,3 +46,5 @@ namespace skibidi
         ) override;
     };
 }
+
+#endif

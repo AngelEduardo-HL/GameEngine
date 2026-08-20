@@ -3,7 +3,6 @@
 #include "raylib.h"
 #include "scene_manager.hpp"
 
-
 namespace skibidi
 {
     void Play::OnInit()
@@ -30,28 +29,28 @@ namespace skibidi
 
     void Play::Update()
     {
-        // C = recoger moneda
+        // Recoger moneda
         if (IsKeyPressed(KEY_C))
         {
             player.GrabCoin();
         }
 
 
-        // E = enemigo golpeado
+        // Golpear enemigo
         if (IsKeyPressed(KEY_E))
         {
             player.EnemyHit();
         }
 
 
-        // P = jugador golpeado
+        // Jugador recibe golpe
         if (IsKeyPressed(KEY_P))
         {
             player.PlayerHit();
         }
 
 
-        // Regresar al Menu
+        // Regresar al menu
         if (IsKeyPressed(KEY_BACKSPACE))
         {
             SceneManager::get().changeScene(
@@ -124,9 +123,11 @@ namespace skibidi
     {
         if (data.type == "grab_coin")
         {
+            playerScore++;
+
             TraceLog(
                 LOG_INFO,
-                "Se agarro una moneda"
+                "Evento: grab_coin"
             );
         }
 
@@ -134,7 +135,7 @@ namespace skibidi
         {
             TraceLog(
                 LOG_INFO,
-                "Enemigo golpeado"
+                "Evento: enemy_hit"
             );
         }
 
@@ -142,7 +143,7 @@ namespace skibidi
         {
             TraceLog(
                 LOG_INFO,
-                "El jugador fue golpeado"
+                "Evento: player_hit"
             );
         }
     }

@@ -3,6 +3,8 @@
 #include "raylib.h"
 #include "resource_dir.h"
 
+#include "Menu.hpp"
+#include "Play.hpp"
 
 namespace skibidi
 {
@@ -26,7 +28,6 @@ namespace skibidi
         );
 
 
-        // Registramos las escenas.
         sceneMgr.addScene(
             "menu",
             new Menu()
@@ -39,7 +40,6 @@ namespace skibidi
         );
 
 
-        // Escena inicial.
         sceneMgr.changeScene(
             "menu"
         );

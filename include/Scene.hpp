@@ -7,7 +7,6 @@ namespace skibidi
     public:
 
         Scene() = default;
-
         virtual ~Scene() = default;
 
         virtual void OnInit() = 0;

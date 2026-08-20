@@ -1,9 +1,7 @@
-#pragma once
+#ifndef SKIBIDI_ENGINE_HPP
+#define SKIBIDI_ENGINE_HPP
 
-#include "Menu.hpp"
-#include "Play.hpp"
 #include "scene_manager.hpp"
-
 
 namespace skibidi
 {
@@ -20,7 +18,6 @@ namespace skibidi
         void Run();
 
         void Update();
-
         void Draw();
 
         void Shutdown();
@@ -34,3 +31,5 @@ namespace skibidi
         int screenHeight = 600;
     };
 }
+
+#endif

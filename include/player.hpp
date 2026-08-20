@@ -1,50 +1,50 @@
 #pragma once
 
-#include "Scene.hpp"
 #include "EventBus.hpp"
-#include "player.hpp"
-
 
 namespace skibidi
 {
-    class Play :
-        public Scene,
-        public EventListener
+    class Player
     {
-    private:
-
-        // Evita volver a registrar los mismos
-        // eventos cada vez que regresamos a Play.
-        bool eventsBound = false;
-
-
     public:
 
-        Play() = default;
-        ~Play() override = default;
+        void GrabCoin()
+        {
+            EventData data;
+
+            data.type = "grab_coin";
+
+            EventBus::get().fire(
+                "grab_coin",
+                data
+            );
+        }
 
 
-        void OnInit() override;
-        void OnEnter() override;
+        void EnemyHit()
+        {
+            EventData data;
 
-        void Update() override;
-        void Draw() override;
+            data.type = "enemy_hit";
 
-        void OnExit() override;
-
-
-        void onEvent(
-            EventData data
-        ) override;
-
-
-        Player player;
+            EventBus::get().fire(
+                "enemy_hit",
+                data
+            );
+        }
 
 
-        int eventId_01 = 0;
-        int eventId_02 = 0;
+        void PlayerHit()
+        {
+            EventData data;
 
-        int playerScore = 0;
-        int grabCoinEvId = 0;
+            data.type = "player_hit";
+            data.intVal = 20;
+
+            EventBus::get().fire(
+                "player_hit",
+                data
+            );
+        }
     };
 }

@@ -21,12 +21,12 @@ namespace skibidi
 
         void processChange()
         {
-            if (!nextScene)
+            if (nextScene == nullptr)
             {
                 return;
             }
 
-            if (currentScene)
+            if (currentScene != nullptr)
             {
                 currentScene->OnExit();
             }
@@ -50,20 +50,7 @@ namespace skibidi
 
         SceneManager(const SceneManager&) = delete;
 
-        SceneManager& operator=(
-            const SceneManager&
-            ) = delete;
-
-
-        ~SceneManager()
-        {
-            for (auto& scene : scenes)
-            {
-                delete scene.second;
-            }
-
-            scenes.clear();
-        }
+        SceneManager& operator=(const SceneManager&) = delete;
 
 
         void addScene(
@@ -92,23 +79,20 @@ namespace skibidi
 
         void Update()
         {
-            // Procesa cambios pendientes.
             processChange();
 
-            if (currentScene)
+            if (currentScene != nullptr)
             {
                 currentScene->Update();
             }
 
-            // También permite cambiar de escena
-            // desde un evento generado durante Update.
             processChange();
         }
 
 
         void Draw()
         {
-            if (currentScene)
+            if (currentScene != nullptr)
             {
                 currentScene->Draw();
             }
