@@ -2,35 +2,41 @@
 
 #include "Scene.hpp"
 #include "Circle.hpp"
-#include "GameGUI.hpp"
+#include "kai_gui.hpp"
+#include "EventBus.hpp"
+
 
 namespace skibidi
 {
-    class Menu : public Scene
+    class Menu :
+        public Scene,
+        public EventListener
     {
+    private:
+
+        MenuGUI menuGUI;
+
+
     public:
 
-        Menu() = default;
-        ~Menu() = default;
+        Circle circles;
 
-        void onEnter() override;
-        void onExit() override;
+
+        Menu();
+        ~Menu() override = default;
+
+
+        void OnInit() override;
+        void OnEnter() override;
 
         void Update() override;
         void Draw() override;
 
-    private:
+        void OnExit() override;
 
-        Circle circle
-        {
-            400.0f,
-            300.0f,
-            30.0f,
-            200.0f,
-            150.0f,
-            PINK
-        };
 
-        MenuGUI menuGUI;
+        void onEvent(
+            EventData data
+        ) override;
     };
 }

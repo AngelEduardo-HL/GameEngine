@@ -1,29 +1,50 @@
-//#pragma once
-//#include <raylib.h>
-//#include "even_bus.hpp"
-//
-//class Player {
-//public:
-//	void grabCoin() {
-//		// Dispara un evento para notificar que se ha recogido una moneda
-//		EventData data;
-//		data.type = "grab_coin";
-//		EventBus::get().fire("grab_coin", data);
-//	}
-//
-//	void enemyHit() {
-//		// Dispara un evento para notificar que el jugador ha sido golpeado por un enemigo
-//		EventData data;
-//		data.type = "enemy_hit";
-//		EventBus::get().fire("enemy_hit", data);
-//	}
-//
-//	void playerHit() {
-//		// Dispara un evento para notificar que el jugador ha sido golpeado
-//		EventData data;
-//		data.type = "player_hit";
-//		data.intVal = 20;
-//		EventBus::get().fire("player_hit", data);
-//	}
-//
-//};
+#pragma once
+
+#include "Scene.hpp"
+#include "EventBus.hpp"
+#include "player.hpp"
+
+
+namespace skibidi
+{
+    class Play :
+        public Scene,
+        public EventListener
+    {
+    private:
+
+        // Evita volver a registrar los mismos
+        // eventos cada vez que regresamos a Play.
+        bool eventsBound = false;
+
+
+    public:
+
+        Play() = default;
+        ~Play() override = default;
+
+
+        void OnInit() override;
+        void OnEnter() override;
+
+        void Update() override;
+        void Draw() override;
+
+        void OnExit() override;
+
+
+        void onEvent(
+            EventData data
+        ) override;
+
+
+        Player player;
+
+
+        int eventId_01 = 0;
+        int eventId_02 = 0;
+
+        int playerScore = 0;
+        int grabCoinEvId = 0;
+    };
+}

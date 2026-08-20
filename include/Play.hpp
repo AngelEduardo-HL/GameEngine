@@ -2,7 +2,7 @@
 
 #include "Scene.hpp"
 
-#include"even_bus.hpp"
+#include"EventBus.hpp"
 #include "player.hpp"
 
 namespace skibidi

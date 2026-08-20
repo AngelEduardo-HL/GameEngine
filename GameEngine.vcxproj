@@ -304,8 +304,8 @@
     <ClInclude Include="include\Canvas.hpp" />
     <ClInclude Include="include\Circle.hpp" />
     <ClInclude Include="include\Engine.hpp" />
-    <ClInclude Include="include\even_bus.hpp" />
-    <ClInclude Include="include\GameGUI.hpp" />
+    <ClInclude Include="include\EventBus.hpp" />
+    <ClInclude Include="include\kai_gui.hpp" />
     <ClInclude Include="include\Menu.hpp" />
     <ClInclude Include="include\Play.hpp" />
     <ClInclude Include="include\player.hpp" />
@@ -317,6 +317,7 @@
   <ItemGroup>
     <ClCompile Include="src\Circle.cpp" />
     <ClCompile Include="src\Engine.cpp" />
+    <ClCompile Include="src\kai_gui.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Menu.cpp" />
     <ClCompile Include="src\Play.cpp" />

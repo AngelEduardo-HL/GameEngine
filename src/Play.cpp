@@ -1,72 +1,149 @@
 #include "Play.hpp"
 
 #include "raylib.h"
+#include "scene_manager.hpp"
+
 
 namespace skibidi
 {
-    void Play::onEnter()
+    void Play::OnInit()
     {
-        TraceLog(LOG_INFO, "Entrando a Play");
+        if (!eventsBound)
+        {
+            listen("grab_coin");
+            listen("enemy_hit");
+            listen("player_hit");
 
-		//listen("grab_coin");
+            eventsBound = true;
+        }
     }
 
-    void Play::onExit()
+
+    void Play::OnEnter()
     {
-        TraceLog(LOG_INFO, "Saliendo de Play");
+        TraceLog(
+            LOG_INFO,
+            "Entrando a Play"
+        );
     }
+
 
     void Play::Update()
     {
+        // C = recoger moneda
         if (IsKeyPressed(KEY_C))
         {
-			//player.GrabCoin();
-		}
+            player.GrabCoin();
+        }
+
+
+        // E = enemigo golpeado
+        if (IsKeyPressed(KEY_E))
+        {
+            player.EnemyHit();
+        }
+
+
+        // P = jugador golpeado
+        if (IsKeyPressed(KEY_P))
+        {
+            player.PlayerHit();
+        }
+
+
+        // Regresar al Menu
         if (IsKeyPressed(KEY_BACKSPACE))
         {
-
-		}
-        if (IsKeyPressed(KEY_SPACE))
-        {
-
-		}
+            SceneManager::get().changeScene(
+                "menu"
+            );
+        }
     }
+
 
     void Play::Draw()
     {
         DrawText(
             "PLAY",
             350,
-            250,
+            150,
             40,
-            GREEN
+            WHITE
         );
 
+
         DrawText(
-            "BACKSPACE = Regresar al Menu",
-            220,
+            "C = Grab Coin",
+            300,
+            250,
+            20,
+            WHITE
+        );
+
+
+        DrawText(
+            "E = Enemy Hit",
+            300,
+            285,
+            20,
+            WHITE
+        );
+
+
+        DrawText(
+            "P = Player Hit",
+            300,
             320,
+            20,
+            WHITE
+        );
+
+
+        DrawText(
+            "BACKSPACE = Menu",
+            300,
+            380,
             20,
             WHITE
         );
     }
 
-    /*void Play::onEvent(EventData data)
+
+    void Play::OnExit()
+    {
+        TraceLog(
+            LOG_INFO,
+            "Saliendo de Play"
+        );
+    }
+
+
+    void Play::onEvent(
+        EventData data
+    )
     {
         if (data.type == "grab_coin")
         {
-            playerScore += 10;
-            TraceLog(LOG_INFO, "Moneda recogida! Puntuación: %d", playerScore);
+            TraceLog(
+                LOG_INFO,
+                "Se agarro una moneda"
+            );
         }
+
         else if (data.type == "enemy_hit")
         {
-            playerScore -= 5;
-            TraceLog(LOG_INFO, "Golpeado por un enemigo! Puntuación: %d", playerScore);
+            TraceLog(
+                LOG_INFO,
+                "Enemigo golpeado"
+            );
         }
+
         else if (data.type == "player_hit")
         {
-            playerScore -= data.intVal;
-            TraceLog(LOG_INFO, "Jugador golpeado! Puntuación: %d", playerScore);
+            TraceLog(
+                LOG_INFO,
+                "El jugador fue golpeado"
+            );
         }
-	}*/
+    }
 }

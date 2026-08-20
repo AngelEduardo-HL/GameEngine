@@ -39,13 +39,13 @@
     <ClInclude Include="include\Canvas.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\GameGUI.hpp">
+    <ClInclude Include="include\kai_gui.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\raygui.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\even_bus.hpp">
+    <ClInclude Include="include\EventBus.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\player.hpp">
@@ -67,6 +67,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Play.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\kai_gui.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

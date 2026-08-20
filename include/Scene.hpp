@@ -2,17 +2,20 @@
 
 namespace skibidi
 {
-	class Scene
-	{
-		public:
-		virtual ~Scene() = default;
+    class Scene
+    {
+    public:
 
-		virtual void onEnter() = 0;
-		virtual void onExit() = 0;
-		virtual void Update() = 0;
-		virtual void Draw() = 0;
-		//virtual void onEvent(struct EventData data) {} // Añadido para permitir override
+        Scene() = default;
 
-	};
+        virtual ~Scene() = default;
+
+        virtual void OnInit() = 0;
+        virtual void OnEnter() = 0;
+
+        virtual void Update() = 0;
+        virtual void Draw() = 0;
+
+        virtual void OnExit() = 0;
+    };
 }
-

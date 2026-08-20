@@ -1,53 +1,17 @@
-#include "Menu.hpp"
-
 #include "raylib.h"
+#include "Engine.hpp"
 
-namespace skibidi
+#define RAYGUI_IMPLEMENTATION
+#include "raygui.h"
+
+
+int main()
 {
-    void Menu::onEnter()
-    {
-        TraceLog(LOG_INFO, "Entrando al Menu");
-    }
+    skibidi::Engine engine;
 
-    void Menu::onExit()
-    {
-        TraceLog(LOG_INFO, "Saliendo del Menu");
-    }
+    engine.Init();
+    engine.Run();
+    engine.Shutdown();
 
-    void Menu::Update()
-    {
-        // Movimiento de la pelota
-        circle.Update(GetFrameTime());
-
-        // Muestra u oculta el menu GUI
-        if (IsKeyPressed(KEY_M))
-        {
-            menuGUI.toggle();
-        }
-    }
-
-    void Menu::Draw()
-    {
-        DrawText(
-            "MENU",
-            350,
-            40,
-            30,
-            WHITE
-        );
-
-        DrawText(
-            "M = Mostrar/Ocultar GUI",
-            20,
-            550,
-            20,
-            LIGHTGRAY
-        );
-
-        // Pelota
-        circle.Draw();
-
-        // Interfaz
-        menuGUI.draw();
-    }
+    return 0;
 }

@@ -6,26 +6,22 @@ class Circle
 {
 public:
 
-    Circle(
-        float x,
-        float y,
-        float radius,
-        float velx,
-        float vely,
-        Color color
+    Circle();
+    ~Circle() = default;
+
+    void DrawCircle();
+
+    void MoveCircle(
+        int screenWidth,
+        int screenHeight
     );
 
-    void Update(float dt);
-    void Draw() const;
+    void ChangeColor();
 
-private:
 
     Vector2 position;
-    Vector2 velocity;
+    Vector2 vel;
 
-    float radius;
+    float rad;
     Color color;
-
-    void CollisionCircle(float screenWidth, float screenHeight);
-    void ChangeColor();
 };
