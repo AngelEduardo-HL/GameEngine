@@ -2,6 +2,7 @@
 
 #include "raylib.h"
 #include "scene_manager.hpp"
+#include <iostream>
 
 namespace skibidi
 {
@@ -12,6 +13,21 @@ namespace skibidi
             listen("grab_coin");
             listen("enemy_hit");
             listen("player_hit");
+
+			ship = new Ship();
+			ship2 = new Ship();
+
+			bullet = new Bullet();
+
+			ship->setPosition(10, 20);
+			ship2->setPosition(150, 225);
+
+			bullet->setPosition(400, 300);
+
+			entityMgr.add(ship);
+			entityMgr.add(ship2);
+			entityMgr.add(bullet);
+
 
             eventsBound = true;
         }
@@ -29,7 +45,7 @@ namespace skibidi
 
     void Play::Update()
     {
-		ship.update();
+		entityMgr.update();
 
         // Recoger moneda
         if (IsKeyPressed(KEY_C))
@@ -64,7 +80,7 @@ namespace skibidi
 
     void Play::Draw()
     {
-		ship.draw();
+		entityMgr.draw();
 
         DrawText(
             "PLAY",

@@ -5,6 +5,8 @@
 #include "EventBus.hpp"
 #include "player.hpp"
 #include "ship.h"
+#include "entityManager.h"
+#include "bullet.h"
 
 namespace skibidi
 {
@@ -37,7 +39,12 @@ namespace skibidi
 
 
         Player player;
-		Ship ship;
+
+        EntityManager entityMgr;
+
+		Ship* ship;
+		Ship* ship2;
+		Bullet* bullet;
 
         int eventId_01 = 0;
         int eventId_02 = 0;

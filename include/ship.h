@@ -32,7 +32,6 @@ public:
 			position.x += speed * GetFrameTime();
 		}
 
-
 	}
 
 	void draw() override {
