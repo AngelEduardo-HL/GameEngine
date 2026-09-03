@@ -3,6 +3,7 @@
 #include "entity.h"
 #include "resources_manager.h"
 
+
 class Ship : public Entity
 {
 public:
@@ -13,31 +14,40 @@ public:
     {
         name = "Ship";
         active = true;
+        position = {400.0f,300.0f};
 
-        position = { 400.0f, 300.0f };
+        texture = skibidi::ResourcesManager::get().getTexture("546Crusier.png");
 
-        texture =
-            skibidi::ResourcesManager::get()
-            .getTexture("546Crusier.png");
+        collider.radius = 20.0f;
 
-		collider.radius = 20.0f;
+        collider.update(position);
     }
+
 
     ~Ship()
     {
+
     }
 
     void update() override
     {
+        if (!active)
+        {
+            return;
+        }
+
+
         if (IsKeyDown(KEY_W))
         {
             position.y -= speed * GetFrameTime();
         }
 
+
         if (IsKeyDown(KEY_S))
         {
             position.y += speed * GetFrameTime();
         }
+
 
         if (IsKeyDown(KEY_A))
         {
@@ -48,16 +58,37 @@ public:
         {
             position.x += speed * GetFrameTime();
         }
+
+        updateCollider();
     }
+
 
     void draw() override
     {
-        if (!isActive() || texture.id == 0)
+        if (!active ||texture.id == 0)
         {
-			Vector2 pos = { position.x - texture.width / 2.0f, position.y - texture.height / 2.0f };
-			DrawTextureEx(texture, position, 0.0f, 1.0f, WHITE);
+            return;
         }
 
-        DrawTexture(texture,position.x,position.y,WHITE);
+        Vector2 drawPosition = {position.x - texture.width / 2.0f,position.y - texture.height / 2.0f};
+
+        DrawTextureV(texture,drawPosition,WHITE);
+
+        if (debugCollider)
+        {
+            collider.debugDraw(RED);
+        }
+    }
+
+
+    Vector2 getMuzzlePosition() const
+    {
+        return
+        {
+            position.x,
+
+            position.y -
+                texture.height / 2.0f
+        };
     }
 };

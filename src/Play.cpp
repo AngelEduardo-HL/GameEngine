@@ -3,6 +3,7 @@
 #include "raylib.h"
 #include "scene_manager.hpp"
 
+
 namespace skibidi
 {
     void Play::OnInit()
@@ -13,36 +14,24 @@ namespace skibidi
             listen("enemy_hit");
             listen("player_hit");
 
-            // Crear entidades
             ship = new Ship();
-            bullet = new Bullet();
+            ship2 = new Ship();
 
-            // Posiciones
-            ship->setPosition(10,20);
+            ship->setPosition(300.0f,500.0f);
+            ship2->setPosition(500.0f,150.0f);
 
-            bullet->setPosition(400,300);
+            ship2->speed = 0.0f;
 
-            // Agregar al Entity Manager
             entityMgr.add(ship);
             entityMgr.add(ship2);
-            entityMgr.add(bullet);
 
-            // =========================================
-            // RESOURCE MANAGER
-            // =========================================
-
-            // FUENTE
             font = assets.getFont("SpaceFont3.ttf");
 
-            // SONIDO
-            sound = assets.getSound("Pew.wav");
 
-            // MUSICA
+            sound = assets.getSound("Pew.wav");
             bg_music = assets.getMusic("SpaceMusic.mp3");
 
-            // TEXTURA DE FONDO
-            textureBG = assets.getTexture("SpaceBG.png");
-
+            textureBG =assets.getTexture("SpaceBG.png");
             eventsBound = true;
         }
     }
@@ -50,46 +39,41 @@ namespace skibidi
     void Play::OnEnter()
     {
         TraceLog(LOG_INFO,"Entrando a Play");
-
-        // Iniciar musica
         PlayMusicStream(bg_music);
     }
 
     void Play::Update()
     {
-        // =========================================
-        // MUSICA
-        // =========================================
 
         UpdateMusicStream(bg_music);
-
-        // =========================================
-        // ENTIDADES
-        // =========================================
-
         entityMgr.update();
 
-        // =========================================
-        // SONIDO CON CLICK IZQUIERDO
-        // =========================================
+        for (int i = 0;i < MAX_BULLETS;++i)
+        {
+            if (bullets[i].isActive())
+            {
+                bullets[i].update();
+
+                if (ship2 != nullptr &&ship2->isActive() &&bullets[i].collidesWith(*ship2))
+                {
+                    TraceLog(LOG_INFO,"Bala colisiono con Ship 2");
+
+                    bullets[i].setActive(false);
+                }
+            }
+        }
 
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
         {
-            TraceLog(LOG_INFO,"Mouse Left Button Pressed");
+            TraceLog(LOG_INFO,"Disparo");
+
+            Shoot();
+            PlaySound(sound);
 
             EventData data;
-
-            data.type = "onclick";
-
+            data.type ="onclick";
             EventBus::get().fire("onclick",data);
-
-            // Reproducir sonido
-            PlaySound(sound);
         }
-
-        // =========================================
-        // EVENTOS DEL PLAYER
-        // =========================================
 
         if (IsKeyPressed(KEY_C))
         {
@@ -106,10 +90,6 @@ namespace skibidi
             player.PlayerHit();
         }
 
-        // =========================================
-        // REGRESAR AL MENU
-        // =========================================
-
         if (IsKeyPressed(KEY_BACKSPACE))
         {
             SceneManager::get().changeScene("menu");
@@ -118,37 +98,53 @@ namespace skibidi
 
     void Play::Draw()
     {
-        // =========================================
-        // FONDO
-        // =========================================
 
-        DrawTextureEx(textureBG,{ 0.0f, 0.0f },0.0f,1.0f,WHITE);
-
-        // =========================================
-        // ENTIDADES
-        // =========================================
+        if (textureBG.id != 0)
+        {
+            DrawTextureEx(textureBG,{0.0f,0.0f},0.0f,1.0f,WHITE);
+        }
 
         entityMgr.draw();
 
-        // =========================================
-        // TEXTO CON FUENTE
-        // =========================================
+        for (int i = 0;i < MAX_BULLETS;++i)
+        {
+            if (bullets[i].isActive())
+            {
+                bullets[i].draw();
+            }
+        }
 
-        DrawTextEx(font,"Space Game",{ 100.0f, 100.0f },40.0f,0.0f,WHITE);
+        DrawTextEx(font,"Space Game",{100.0f,100.0f},40.0f,0.0f,WHITE);
 
-        DrawText("CLICK IZQUIERDO = Sonido",20,500,20,WHITE);
-
-        DrawText("C = Grab Coin | E = Enemy Hit | P = Player Hit",20,530,18,WHITE);
+        DrawText("CLICK IZQUIERDO = DISPARAR",20,500,20,WHITE);
 
         DrawText("BACKSPACE = Menu",20,560,18,WHITE);
     }
 
+    void Play::Shoot()
+    {
+        if (ship == nullptr)
+        {
+            return;
+        }
+
+        for (int i = 0;i < MAX_BULLETS;++i)
+        {
+            if (!bullets[i].isActive())
+            {
+                bullets[i].fire(ship->getMuzzlePosition());
+                TraceLog(LOG_INFO,"Bullet %i activada",i);
+
+                return;
+            }
+        }
+        TraceLog(LOG_WARNING,"Bullet Pool lleno");
+    }
 
     void Play::OnExit()
     {
         TraceLog(LOG_INFO,"Saliendo de Play");
 
-        // Detener musica al salir de Play
         StopMusicStream(bg_music);
     }
 
@@ -157,7 +153,6 @@ namespace skibidi
         if (data.type =="grab_coin")
         {
             playerScore++;
-
             TraceLog(LOG_INFO,"Evento: grab_coin");
         }
 
@@ -170,17 +165,5 @@ namespace skibidi
         {
             TraceLog(LOG_INFO,"Evento: player_hit");
         }
-    }
-    void Play::Shoot()
-    {
-        for (int = 0; i < MAX_BULLETS; ++i)
-        {
-            if (!bullets[i].isActive())
-            {
-                bullets[i].setPosition(ship->getPosition().x, ship->getPosition().y);
-                bullets[i].setActive(true);
-                break;
-			}
-		}
     }
 }

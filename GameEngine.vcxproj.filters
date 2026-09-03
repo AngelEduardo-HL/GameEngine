@@ -69,6 +69,7 @@
     <ClInclude Include="include\circle_collider.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\enemy.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
