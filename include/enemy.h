@@ -14,7 +14,7 @@ public:
 		name = "Enemy";
 		active = true;
 		collider.radius = texture.width / 2;
-		texture = ResourcesManager::get().getTexture("enemy.png");
+		texture = ResourcesManager::get().getTexture("Tantive.png");
 	}
 
 	void update() override {

@@ -15,18 +15,15 @@ namespace skibidi
             listen("player_hit");
 
             ship = new Ship();
-            ship2 = new Ship();
 
             ship->setPosition(300.0f,500.0f);
-            ship2->setPosition(500.0f,150.0f);
-
-            ship2->speed = 0.0f;
+			//Posicion aleatoria de enemigos
+			enemies->setPosition(GetRandomValue(50, 750), GetRandomValue(-100, -50));
 
             entityMgr.add(ship);
-            entityMgr.add(ship2);
+			entityMgr.add(enemies);
 
             font = assets.getFont("SpaceFont3.ttf");
-
 
             sound = assets.getSound("Pew.wav");
             bg_music = assets.getMusic("SpaceMusic.mp3");
@@ -53,15 +50,16 @@ namespace skibidi
             if (bullets[i].isActive())
             {
                 bullets[i].update();
-
-                if (ship2 != nullptr &&ship2->isActive() &&bullets[i].collidesWith(*ship2))
-                {
-                    TraceLog(LOG_INFO,"Bala colisiono con Ship 2");
-
-                    bullets[i].setActive(false);
-                }
             }
         }
+
+        for (int i = 0;i < MAX_ENEMIES;++i)
+        {
+            if (enemies[i].isActive())
+            {
+                enemies[i].update();
+            }
+		}
 
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
         {
@@ -139,6 +137,18 @@ namespace skibidi
             }
         }
         TraceLog(LOG_WARNING,"Bullet Pool lleno");
+
+        //Enemy
+        for (int i = 0;i < MAX_ENEMIES;++i)
+        {
+            if (!enemies[i].isActive())
+            {
+                enemies[i].setPosition(GetRandomValue(50, 750), GetRandomValue(-100, -50));
+                TraceLog(LOG_INFO,"Enemy %i activado",i);
+                return;
+            }
+		}
+
     }
 
     void Play::OnExit()

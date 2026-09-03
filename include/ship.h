@@ -18,7 +18,7 @@ public:
 
         texture = skibidi::ResourcesManager::get().getTexture("546Crusier.png");
 
-        collider.radius = 20.0f;
+        collider.radius = 100.0f;
 
         collider.update(position);
     }

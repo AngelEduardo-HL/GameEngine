@@ -9,6 +9,7 @@
 #include "ship.h"
 #include "entityManager.h"
 #include "bullet.h"
+#include "enemy.h"
 
 #include "resources_manager.h"
 
@@ -23,12 +24,11 @@ namespace skibidi
 
         bool eventsBound = false;
 
-        // =========================================
-        // BULLET POOL
-        // =========================================
-
         static constexpr int MAX_BULLETS = 10;
+		static constexpr int MAX_ENEMIES = 5;
+
         Bullet bullets[MAX_BULLETS];
+		Enemy enemies[MAX_ENEMIES];
 
     public:
 
@@ -46,32 +46,17 @@ namespace skibidi
         // Disparo
         void Shoot();
 
-        // =========================================
-        // PLAYER Y ENTIDADES
-        // =========================================
-
         Player player;
         EntityManager entityMgr;
 
         Ship* ship = nullptr;
-        Ship* ship2 = nullptr;
-
-        // =========================================
-        // EVENTOS
-        // =========================================
 
         int eventId_01 = 0;
         int eventId_02 = 0;
         int playerScore = 0;
         int grabCoinEvId = 0;
 
-
-        // =========================================
-        // RESOURCE MANAGER
-        // =========================================
-
         ResourcesManager& assets =  ResourcesManager::get();
-
 
         Font font = {};
         Sound sound = {};
