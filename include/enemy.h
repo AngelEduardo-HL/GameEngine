@@ -7,14 +7,17 @@ using namespace skibidi;
 
 class Enemy : public Entity {
 public:
-	float speed = 50.0f;
+	float speed = 0.5f;
 	int radius = 15;
 
 	Enemy() {
 		name = "Enemy";
 		active = true;
-		collider.radius = texture.width / 2;
-		texture = ResourcesManager::get().getTexture("Tantive.png");
+		texture = ResourcesManager::get().getTexture("Tantive_I.png");
+
+		collider.radius = 65.0f;
+		collider.update(position);
+
 	}
 
 	void update() override {
@@ -23,6 +26,10 @@ public:
 
 		if (position.y >= GetScreenHeight() + radius) {
 			active = false;
+		}
+
+		if (debugCollider) {
+			collider.debugDraw(PURPLE);
 		}
 	}
 

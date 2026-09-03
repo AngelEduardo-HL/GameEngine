@@ -8,21 +8,18 @@ class Ship : public Entity
 {
 public:
 
-    float speed = 65.0f;
+    float speed = 300.0f;
 
     Ship()
     {
         name = "Ship";
         active = true;
         position = {400.0f,300.0f};
+        texture = skibidi::ResourcesManager::get().getTexture("546_Crusier.png");
 
-        texture = skibidi::ResourcesManager::get().getTexture("546Crusier.png");
-
-        collider.radius = 100.0f;
-
+        collider.radius = 75.0f;
         collider.update(position);
     }
-
 
     ~Ship()
     {
@@ -42,12 +39,10 @@ public:
             position.y -= speed * GetFrameTime();
         }
 
-
         if (IsKeyDown(KEY_S))
         {
             position.y += speed * GetFrameTime();
         }
-
 
         if (IsKeyDown(KEY_A))
         {
@@ -83,12 +78,6 @@ public:
 
     Vector2 getMuzzlePosition() const
     {
-        return
-        {
-            position.x,
-
-            position.y -
-                texture.height / 2.0f
-        };
+        return {position.x, position.y - texture.height / 2.0f};
     }
 };

@@ -319,6 +319,7 @@
     <ClInclude Include="include\resource_dir.h" />
     <ClInclude Include="include\Scene.hpp" />
     <ClInclude Include="include\scene_manager.hpp" />
+    <ClInclude Include="include\score.h" />
     <ClInclude Include="include\ship.h" />
   </ItemGroup>
   <ItemGroup>

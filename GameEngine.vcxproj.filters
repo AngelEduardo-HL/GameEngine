@@ -70,6 +70,7 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\enemy.h" />
+    <ClInclude Include="include\score.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">

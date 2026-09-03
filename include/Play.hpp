@@ -11,6 +11,8 @@
 #include "bullet.h"
 #include "enemy.h"
 
+#include "score.h"
+
 #include "resources_manager.h"
 
 
@@ -27,6 +29,8 @@ namespace skibidi
         static constexpr int MAX_BULLETS = 10;
 		static constexpr int MAX_ENEMIES = 5;
 
+		const float ENEMY_SPAWN_INTERVAL = 2.0f;
+
         Bullet bullets[MAX_BULLETS];
 		Enemy enemies[MAX_ENEMIES];
 
@@ -41,15 +45,19 @@ namespace skibidi
         void Draw() override;
         void OnExit() override;
 
-        void onEvent(EventData data) override;
-
-        // Disparo
+		void SpawnEnemy();
         void Shoot();
+		void CheckCollisions();
+
+        void onEvent(EventData data) override;
 
         Player player;
         EntityManager entityMgr;
 
         Ship* ship = nullptr;
+		Score* score;
+
+		float spawnTimer = 0.0f;
 
         int eventId_01 = 0;
         int eventId_02 = 0;
