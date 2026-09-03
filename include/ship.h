@@ -3,7 +3,6 @@
 #include "entity.h"
 #include "resources_manager.h"
 
-
 class Ship : public Entity
 {
 public:
@@ -13,20 +12,18 @@ public:
     Ship()
     {
         name = "Ship";
-
         active = true;
 
-        position =
-        {
-            400.0f,
-            300.0f
-        };
+        position = { 400.0f, 300.0f };
 
-        texture = skibidi::ResourcesManager::get().getTexture("546Crusier.png");
+        texture =
+            skibidi::ResourcesManager::get()
+            .getTexture("546Crusier.png");
     }
 
     ~Ship()
     {
+        // Ya no hacemos UnloadTexture(texture)
     }
 
     void update() override
@@ -48,7 +45,7 @@ public:
 
         if (IsKeyDown(KEY_D))
         {
-            position.x += speed *GetFrameTime();
+            position.x += speed * GetFrameTime();
         }
     }
 
@@ -59,6 +56,6 @@ public:
             return;
         }
 
-        DrawTexture(texture,static_cast<int>(position.x),static_cast<int>(position.y),WHITE);
+        DrawTexture(texture,position.x,position.y,WHITE);
     }
 };

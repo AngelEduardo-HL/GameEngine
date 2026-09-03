@@ -313,6 +313,7 @@
     <ClInclude Include="include\Play.hpp" />
     <ClInclude Include="include\player.hpp" />
     <ClInclude Include="include\raygui.h" />
+    <ClInclude Include="include\resources_manager.h" />
     <ClInclude Include="include\resource_dir.h" />
     <ClInclude Include="include\Scene.hpp" />
     <ClInclude Include="include\scene_manager.hpp" />

@@ -63,6 +63,9 @@
     <ClInclude Include="include\bullet.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\resources_manager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
