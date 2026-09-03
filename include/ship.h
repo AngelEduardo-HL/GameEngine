@@ -19,11 +19,12 @@ public:
         texture =
             skibidi::ResourcesManager::get()
             .getTexture("546Crusier.png");
+
+		collider.radius = 20.0f;
     }
 
     ~Ship()
     {
-        // Ya no hacemos UnloadTexture(texture)
     }
 
     void update() override
@@ -53,7 +54,8 @@ public:
     {
         if (!isActive() || texture.id == 0)
         {
-            return;
+			Vector2 pos = { position.x - texture.width / 2.0f, position.y - texture.height / 2.0f };
+			DrawTextureEx(texture, position, 0.0f, 1.0f, WHITE);
         }
 
         DrawTexture(texture,position.x,position.y,WHITE);

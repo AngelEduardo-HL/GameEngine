@@ -8,6 +8,7 @@
 #include "entityManager.h"
 #include "bullet.h"
 #include "resources_manager.h"
+#define MAX_BULLETS 10
 
 namespace skibidi
 {
@@ -38,6 +39,8 @@ namespace skibidi
             EventData data
         ) override;
 
+        void Shoot();
+
 
         // =========================
         // PLAYER Y ENTIDADES
@@ -47,9 +50,9 @@ namespace skibidi
 
         EntityManager entityMgr;
 
-        Ship* ship = nullptr;
-        Ship* ship2 = nullptr;
-        Bullet* bullet = nullptr;
+        Ship* ship;
+        Ship* ship2;
+        Bullet* bullet;
 
 
         // =========================

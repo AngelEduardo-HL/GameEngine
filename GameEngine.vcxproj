@@ -304,6 +304,7 @@
     <ClInclude Include="include\bullet.h" />
     <ClInclude Include="include\Canvas.hpp" />
     <ClInclude Include="include\Circle.hpp" />
+    <ClInclude Include="include\circle_collider.h" />
     <ClInclude Include="include\Engine.hpp" />
     <ClInclude Include="include\entity.h" />
     <ClInclude Include="include\entityManager.h" />

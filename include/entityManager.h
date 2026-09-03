@@ -18,6 +18,7 @@ public:
 		for(Entity* entity : entities) {
 			if (entity && entity->active) {
 				entity->update();
+				entity->collider.update(entity->position);
 			}
 		}
 	}
@@ -26,6 +27,9 @@ public:
 		for(Entity* entity : entities) {
 			if (entity && entity->active) {
 				entity->draw();
+				if(entity->debugCollider) {
+					entity->collider.debugDraw();
+				}
 			}
 		}
 	}

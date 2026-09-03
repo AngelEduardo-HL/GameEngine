@@ -15,24 +15,12 @@ namespace skibidi
 
             // Crear entidades
             ship = new Ship();
-            ship2 = new Ship();
             bullet = new Bullet();
 
             // Posiciones
-            ship->setPosition(
-                10,
-                20
-            );
+            ship->setPosition(10,20);
 
-            ship2->setPosition(
-                150,
-                225
-            );
-
-            bullet->setPosition(
-                400,
-                300
-            );
+            bullet->setPosition(400,300);
 
             // Agregar al Entity Manager
             entityMgr.add(ship);
@@ -134,12 +122,7 @@ namespace skibidi
         // FONDO
         // =========================================
 
-        DrawTextureEx(
-            textureBG,
-            { 0.0f, 0.0f },
-            0.0f,
-            1.0f,
-            WHITE);
+        DrawTextureEx(textureBG,{ 0.0f, 0.0f },0.0f,1.0f,WHITE);
 
         // =========================================
         // ENTIDADES
@@ -151,34 +134,13 @@ namespace skibidi
         // TEXTO CON FUENTE
         // =========================================
 
-        DrawTextEx(
-            font,
-            "Space Game",
-            { 100.0f, 100.0f },
-            40.0f,
-            0.0f,
-            WHITE);
+        DrawTextEx(font,"Space Game",{ 100.0f, 100.0f },40.0f,0.0f,WHITE);
 
-        DrawText(
-            "CLICK IZQUIERDO = Sonido",
-            20,
-            500,
-            20,
-            WHITE);
+        DrawText("CLICK IZQUIERDO = Sonido",20,500,20,WHITE);
 
-        DrawText(
-            "C = Grab Coin | E = Enemy Hit | P = Player Hit",
-            20,
-            530,
-            18,
-            WHITE);
+        DrawText("C = Grab Coin | E = Enemy Hit | P = Player Hit",20,530,18,WHITE);
 
-        DrawText(
-            "BACKSPACE = Menu",
-            20,
-            560,
-            18,
-            WHITE);
+        DrawText("BACKSPACE = Menu",20,560,18,WHITE);
     }
 
 
@@ -208,5 +170,17 @@ namespace skibidi
         {
             TraceLog(LOG_INFO,"Evento: player_hit");
         }
+    }
+    void Play::Shoot()
+    {
+        for (int = 0; i < MAX_BULLETS; ++i)
+        {
+            if (!bullets[i].isActive())
+            {
+                bullets[i].setPosition(ship->getPosition().x, ship->getPosition().y);
+                bullets[i].setActive(true);
+                break;
+			}
+		}
     }
 }
