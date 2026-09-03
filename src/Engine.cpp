@@ -10,47 +10,26 @@ namespace skibidi
 {
     void Engine::Init()
     {
-        SetConfigFlags(
-            FLAG_VSYNC_HINT |
-            FLAG_WINDOW_HIGHDPI
-        );
+        SetConfigFlags(FLAG_VSYNC_HINT | FLAG_WINDOW_HIGHDPI);
 
 
-        InitWindow(
-            screenWidth,
-            screenHeight,
-            "Game Engine"
-        );
+        InitWindow(screenWidth,screenHeight,"Game Engine");
 
+        InitAudioDevice();
 
-        SearchAndSetResourceDir(
-            "resources"
-        );
+        SearchAndSetResourceDir("resources");
 
+        sceneMgr.addScene("menu",new Menu());
 
-        sceneMgr.addScene(
-            "menu",
-            new Menu()
-        );
+        sceneMgr.addScene("play",new Play());
 
-
-        sceneMgr.addScene(
-            "play",
-            new Play()
-        );
-
-
-        sceneMgr.changeScene(
-            "menu"
-        );
+        sceneMgr.changeScene("menu");
     }
-
 
     void Engine::Update()
     {
         sceneMgr.Update();
     }
-
 
     void Engine::Draw()
     {
@@ -63,7 +42,6 @@ namespace skibidi
         EndDrawing();
     }
 
-
     void Engine::Run()
     {
         while (!WindowShouldClose())
@@ -73,9 +51,10 @@ namespace skibidi
         }
     }
 
-
     void Engine::Shutdown()
     {
+        CloseAudioDevice();
+
         CloseWindow();
     }
 }
