@@ -7,6 +7,7 @@
 #include "ship.h"
 #include "entityManager.h"
 #include "bullet.h"
+#include "resources_manager.h"
 
 namespace skibidi
 {
@@ -38,19 +39,44 @@ namespace skibidi
         ) override;
 
 
+        // =========================
+        // PLAYER Y ENTIDADES
+        // =========================
+
         Player player;
 
         EntityManager entityMgr;
 
-		Ship* ship;
-		Ship* ship2;
-		Bullet* bullet;
+        Ship* ship = nullptr;
+        Ship* ship2 = nullptr;
+        Bullet* bullet = nullptr;
+
+
+        // =========================
+        // EVENTOS
+        // =========================
 
         int eventId_01 = 0;
         int eventId_02 = 0;
 
         int playerScore = 0;
         int grabCoinEvId = 0;
+
+
+        // =========================
+        // RESOURCE MANAGER
+        // =========================
+
+        ResourcesManager& assets =
+            ResourcesManager::get();
+
+        Font font = {};
+
+        Sound sound = {};
+
+        Music bg_music = {};
+
+        Texture2D textureBG = {};
     };
 }
 
