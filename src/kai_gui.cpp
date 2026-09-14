@@ -21,66 +21,24 @@ namespace skibidi
     void MenuGUI::drawGUI()
     {
         // PLAY
-        if (GuiButton(
-            Rectangle
-            {
-                100.0f,
-                100.0f,
-                200.0f,
-                50.0f
-            },
-            "Play"
-        ))
+        if (GuiButton(Rectangle{ 100.0f, 100.0f, 200.0f, 50.0f},"Play"))
         {
             EventData data;
 
             data.name = "Play Button";
             data.tag = "Menu";
 
-            EventBus::get().fire(
-                "start_game",
-                data
-            );
+            EventBus::get().fire( "start_game", data);
         }
 
-
         // OPTIONS
-        GuiButton(
-            Rectangle
-            {
-                100.0f,
-                200.0f,
-                200.0f,
-                50.0f
-            },
-            "Option"
-        );
-
+        GuiButton(Rectangle{100.0f, 200.0f, 200.0f, 50.0f}, "Option");
 
         // EXIT
-        GuiButton(
-            Rectangle
-            {
-                100.0f,
-                300.0f,
-                200.0f,
-                50.0f
-            },
-            "Exit"
-        );
-
+        GuiButton(Rectangle{100.0f, 300.0f, 200.0f, 50.0f}, "Exit");
 
         // CREDITS
-        GuiButton(
-            Rectangle
-            {
-                100.0f,
-                400.0f,
-                200.0f,
-                50.0f
-            },
-            "Credits"
-        );
+        GuiButton(Rectangle{100.0f, 400.0f, 200.0f, 50.0f},"Credits");
     }
 
 

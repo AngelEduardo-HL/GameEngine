@@ -16,11 +16,15 @@ namespace skibidi
 
             ship = new Ship();
 
-            ship->setPosition(300.0f,500.0f);
-
             entityMgr.add(ship);
 			entityMgr.add(enemies);
 
+			shipOrigin.x = GetScreenWidth() / 2.0f;
+			shipOrigin.y = GetScreenHeight() - 100.0f;
+
+			ship->setPosition(shipOrigin);
+
+            lives = new Score();
 			score = new Score();
 
             font = assets.getFont("SpaceFont3.ttf");
@@ -101,6 +105,14 @@ namespace skibidi
         {
             SceneManager::get().changeScene("menu");
         }
+        if (IsKeyPressed(KEY_L))
+        {
+            SceneManager::get().changeScene("loose");
+		}
+        if (IsKeyPressed(KEY_K))
+        {
+            SceneManager::get().changeScene("win");
+		}
     }
 
 
@@ -140,12 +152,27 @@ namespace skibidi
                             enemies[j].active = false;
 							score->addPoint();
                             EventData data;
-                            data.type = "enemy_hit";
-                            EventBus::get().fire("enemy_hit",data);
+                            data.type = "enemy_kill";
+                            EventBus::get().fire("enemy_kill",data);
 						}
                     }
                 }
 			}
+		}
+        for (int j = 0; j < MAX_ENEMIES; j++)
+        {
+            if(enemies[j].active)
+            {
+                if(ship->collidesWith(enemies[j]))
+                {
+                    enemies[j].active = false;
+					ship->setPosition(shipOrigin);
+					lives->shipKilled();
+                    EventData data;
+                    data.type = "player_kill";
+                    EventBus::get().fire("player_kill",data);
+                }
+            }
 		}
     }
 
@@ -175,6 +202,7 @@ namespace skibidi
 
         entityMgr.draw();
 		score->draw();
+		lives->draw();
 
         for (int i = 0;i < MAX_BULLETS;++i)
         {

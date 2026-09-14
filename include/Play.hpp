@@ -8,6 +8,7 @@
 #include "player.hpp"
 #include "ship.h"
 #include "entityManager.h"
+#include "game_manager.h"
 #include "bullet.h"
 #include "enemy.h"
 
@@ -54,8 +55,11 @@ namespace skibidi
         Player player;
         EntityManager entityMgr;
 
+		Vector2 shipOrigin = { 0.0f, 0.0f };
+
         Ship* ship = nullptr;
 		Score* score;
+		Score* lives;
 
 		float spawnTimer = 0.0f;
 

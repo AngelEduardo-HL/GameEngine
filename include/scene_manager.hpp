@@ -53,18 +53,13 @@ namespace skibidi
         SceneManager& operator=(const SceneManager&) = delete;
 
 
-        void addScene(
-            const std::string& name,
-            Scene* scene
-        )
+        void addScene(const std::string& name, Scene* scene)
         {
             scenes[name] = scene;
         }
 
 
-        void changeScene(
-            const std::string& name
-        )
+        void changeScene(const std::string& name)
         {
             auto it = scenes.find(name);
 

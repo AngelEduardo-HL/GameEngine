@@ -4,6 +4,8 @@
 #include "resource_dir.h"
 
 #include "Menu.hpp"
+#include "win_scene.h"
+#include "game_over_scene.h"
 #include "Play.hpp"
 
 namespace skibidi
@@ -20,10 +22,12 @@ namespace skibidi
         SearchAndSetResourceDir("resources");
 
         sceneMgr.addScene("menu",new Menu());
-
         sceneMgr.addScene("play",new Play());
+		sceneMgr.addScene("win", new WinScene());
+		sceneMgr.addScene("loose", new GameOverScene());
 
         sceneMgr.changeScene("menu");
+
     }
 
     void Engine::Update()
