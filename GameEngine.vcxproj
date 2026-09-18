@@ -312,10 +312,12 @@
     <ClInclude Include="include\EventBus.hpp" />
     <ClInclude Include="include\game_manager.h" />
     <ClInclude Include="include\game_over_scene.h" />
+    <ClInclude Include="include\json.hpp" />
     <ClInclude Include="include\kai_gui.hpp" />
     <ClInclude Include="include\Menu.hpp" />
     <ClInclude Include="include\Play.hpp" />
     <ClInclude Include="include\player.hpp" />
+    <ClInclude Include="include\power_up.h" />
     <ClInclude Include="include\raygui.h" />
     <ClInclude Include="include\resources_manager.h" />
     <ClInclude Include="include\resource_dir.h" />

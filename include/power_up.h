@@ -3,28 +3,23 @@
 #include "entity.h"
 #include "raylib.h"
 
-
-class Bullet : public Entity
+class PowerUp : public Entity
 {
 public:
+    float speed = 120.0f;
+    float radius = 14.0f;
 
-    float speed = 350.0f;
-    float radius = 4.0f;
-
-    Bullet()
+    PowerUp()
     {
-        name = "Bullet";
-
+        name = "Double Shot PowerUp";
         active = false;
-
         collider.radius = radius;
-
         collider.update(position);
     }
 
-    void fire(Vector2 startPosition)
+    void spawn(Vector2 spawnPosition)
     {
-        setPosition(startPosition);
+        setPosition(spawnPosition);
         setActive(true);
     }
 
@@ -35,11 +30,10 @@ public:
             return;
         }
 
-        position.y -= speed * GetFrameTime();
-
+        position.y += speed * GetFrameTime();
         updateCollider();
 
-        if (position.y + radius < 0.0f)
+        if (position.y - radius > GetScreenHeight())
         {
             active = false;
         }
@@ -52,7 +46,10 @@ public:
             return;
         }
 
-        DrawCircleV(position,radius,GREEN);
+        DrawCircleV(position, radius, GOLD);
+        DrawCircleLines(static_cast<int>(position.x), static_cast<int>(position.y), radius, YELLOW);
+
+        DrawText("2X", static_cast<int>(position.x - 10.0f), static_cast<int>(position.y - 7.0f), 14, BLACK);
 
         if (debugCollider)
         {

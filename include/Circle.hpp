@@ -10,14 +10,8 @@ public:
     ~Circle();
 
     void DrawCircle();
-
-    void MoveCircle(
-        int screenWidth,
-        int screenHeight
-    );
-
+    void MoveCircle(int screenWidth, int screenHeight);
     void ChangeColor();
-
 
     Vector2 position;
     Vector2 vel;

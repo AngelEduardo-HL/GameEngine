@@ -33,7 +33,6 @@ public:
             return;
         }
 
-
         if (IsKeyDown(KEY_W))
         {
             position.y -= speed * GetFrameTime();
@@ -66,7 +65,6 @@ public:
         }
 
         Vector2 drawPosition = {position.x - texture.width / 2.0f,position.y - texture.height / 2.0f};
-
         DrawTextureV(texture,drawPosition,WHITE);
 
         if (debugCollider)

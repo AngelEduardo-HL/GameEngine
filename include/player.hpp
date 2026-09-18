@@ -13,11 +13,7 @@ namespace skibidi
             EventData data;
 
             data.type = "grab_coin";
-
-            EventBus::get().fire(
-                "grab_coin",
-                data
-            );
+            EventBus::get().fire("grab_coin", data);
         }
 
 
@@ -26,11 +22,7 @@ namespace skibidi
             EventData data;
 
             data.type = "enemy_hit";
-
-            EventBus::get().fire(
-                "enemy_hit",
-                data
-            );
+            EventBus::get().fire("enemy_hit", data);
         }
 
 
@@ -41,10 +33,7 @@ namespace skibidi
             data.type = "player_hit";
             data.intVal = 20;
 
-            EventBus::get().fire(
-                "player_hit",
-                data
-            );
+            EventBus::get().fire("player_hit", data);
         }
     };
 }

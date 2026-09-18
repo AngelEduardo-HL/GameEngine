@@ -27,20 +27,11 @@ public:
         return instance;
     }
 
-    int listen(
-        const std::string& event,
-        EventListener* listener
-    );
+    int listen(const std::string& event, EventListener* listener);
 
-    void unbind(
-        const std::string& event,
-        int id
-    );
+    void unbind(const std::string& event,int id);
 
-    void fire(
-        const std::string& event,
-        EventData data = {}
-    );
+    void fire(const std::string& event, EventData data = {});
 
 private:
 
@@ -54,10 +45,7 @@ private:
 
     int nextId = 0;
 
-    std::unordered_map<
-        std::string,
-        std::vector<Listener>
-    > listeners;
+    std::unordered_map<std::string, std::vector<Listener> > listeners;
 };
 
 
@@ -66,7 +54,6 @@ class EventListener
 public:
 
     virtual ~EventListener();
-
     virtual void onEvent(EventData data) = 0;
 
 protected:
@@ -92,18 +79,12 @@ inline int EventBus::listen(
 {
     int id = ++nextId;
 
-    listeners[event].push_back(
-        { id, listener }
-    );
-
+    listeners[event].push_back({ id, listener });
     return id;
 }
 
 
-inline void EventBus::unbind(
-    const std::string& event,
-    int id
-)
+inline void EventBus::unbind(const std::string& event, int id)
 {
     auto it = listeners.find(event);
 
@@ -132,10 +113,7 @@ inline void EventBus::unbind(
 }
 
 
-inline void EventBus::fire(
-    const std::string& event,
-    EventData data
-)
+inline void EventBus::fire(const std::string& event, EventData data)
 {
     auto it = listeners.find(event);
 
@@ -145,9 +123,6 @@ inline void EventBus::fire(
     }
 
     data.type = event;
-
-    // Copia para evitar problemas si un listener
-    // se elimina durante la ejecución del evento.
     auto list = it->second;
 
     for (const auto& entry : list)
@@ -158,7 +133,6 @@ inline void EventBus::fire(
         }
     }
 }
-
 
 inline EventListener::~EventListener()
 {
@@ -171,17 +145,8 @@ inline EventListener::~EventListener()
     }
 }
 
-
-inline void EventListener::listen(
-    const std::string& event
-)
+inline void EventListener::listen(const std::string& event)
 {
-    int id = EventBus::get().listen(
-        event,
-        this
-    );
-
-    subscriptions.push_back(
-        { event, id }
-    );
+    int id = EventBus::get().listen(event,this);
+    subscriptions.push_back({ event, id });
 }

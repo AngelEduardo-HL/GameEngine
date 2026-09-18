@@ -26,14 +26,12 @@ public:
     CircleCollider collider;
 
     Entity() = default;
-
     virtual ~Entity() = default;
 
     virtual void update()
     {
 
     }
-
 
     virtual void draw()
     {
@@ -48,14 +46,12 @@ public:
         collider.update(position);
     }
 
-
     void setPosition(Vector2 pos)
     {
         position = pos;
 
         collider.update(position);
     }
-
 
     Vector2 getPosition() const
     {

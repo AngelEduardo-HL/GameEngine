@@ -106,20 +106,8 @@ void Circle::MoveCircle(
 
 void Circle::ChangeColor()
 {
-    Color colors[] =
-    {
-        PINK,
-        SKYBLUE,
-        BEIGE,
-        YELLOW,
-        VIOLET,
-        ORANGE,
-        MAGENTA,
-        LIME
-    };
+    Color colors[] = {PINK, SKYBLUE, BEIGE, YELLOW, VIOLET, ORANGE, MAGENTA, LIME};
 
 
-    color = colors[
-        GetRandomValue(0, 7)
-    ];
+    color = colors[GetRandomValue(0, 7)];
 }

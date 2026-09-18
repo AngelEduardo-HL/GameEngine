@@ -1,13 +1,17 @@
 #include "Play.hpp"
 
 #include "raylib.h"
+#include "json.hpp"
 #include "scene_manager.hpp"
+#include <fstream>
 
+using json = nlohmann::json;
 
 namespace skibidi
 {
     void Play::OnInit()
     {
+        // Solo crear objetos y registrar eventos una vez.
         if (!eventsBound)
         {
             listen("grab_coin");
@@ -16,47 +20,103 @@ namespace skibidi
 
             ship = new Ship();
 
+            // EntityManager controla solamente la nave.
             entityMgr.add(ship);
-			entityMgr.add(enemies);
 
-			shipOrigin.x = GetScreenWidth() / 2.0f;
-			shipOrigin.y = GetScreenHeight() - 100.0f;
+            score = new Score();
 
-			ship->setPosition(shipOrigin);
-
-            lives = new Score();
-			score = new Score();
+            gameManager.init();
 
             font = assets.getFont("SpaceFont3.ttf");
-
             sound = assets.getSound("Pew.wav");
             bg_music = assets.getMusic("SpaceMusic.mp3");
+            textureBG = assets.getTexture("SpaceBG.png");
 
-            textureBG =assets.getTexture("SpaceBG.png");
+			char* j = LoadFileText("json/PP.json");
+
+			json data = json::parse(j);
+
+            if (data.is_array() && data.size() > 1) {
+				std::string name = data[0]["name"];
+				float x = data[0]["x"];
+				float y = data[0]["y"];
+            }
+
+            for (const auto& d : data) {
+                std::string name = d["name"];
+                float x = d["x"];
+                float y = d["y"];
+            }
+
+			json item;
+
             eventsBound = true;
         }
+
+        // OnInit se ejecuta cada vez que volvemos a Play.
+        ResetGame();
     }
+
+
+    void Play::ResetGame()
+    {
+        shipOrigin =
+        {
+            GetScreenWidth() / 2.0f,
+            GetScreenHeight() - 100.0f
+        };
+
+        ship->setActive(true);
+        ship->setPosition(shipOrigin);
+
+        score->reset();
+        gameManager.reset();
+
+        spawnTimer = 0.0f;
+        doubleShotTimer = 0.0f;
+
+        powerUp.setActive(false);
+
+        for (int i = 0; i < MAX_BULLETS; ++i)
+        {
+            bullets[i].setActive(false);
+        }
+
+        for (int i = 0; i < MAX_ENEMIES; ++i)
+        {
+            enemies[i].setActive(false);
+        }
+
+        TraceLog(LOG_INFO, "Nueva partida iniciada");
+    }
+
 
     void Play::OnEnter()
     {
-        TraceLog(LOG_INFO,"Entrando a Play");
+        TraceLog(LOG_INFO, "Entrando a Play");
+
         PlayMusicStream(bg_music);
     }
 
+
     void Play::Update()
     {
-
         UpdateMusicStream(bg_music);
+
+        // NAVE
         entityMgr.update();
-		spawnTimer += GetFrameTime();
+
+        // SPAWN ENEMIGOS
+        spawnTimer += GetFrameTime();
 
         if (spawnTimer >= ENEMY_SPAWN_INTERVAL)
         {
             spawnTimer = 0.0f;
             SpawnEnemy();
-		}
+        }
 
-        for (int i = 0;i < MAX_BULLETS;++i)
+        // BALAS
+        for (int i = 0; i < MAX_BULLETS; ++i)
         {
             if (bullets[i].isActive())
             {
@@ -64,28 +124,47 @@ namespace skibidi
             }
         }
 
-        for (int i = 0;i < MAX_ENEMIES;++i)
+        // ENEMIGOS
+        for (int i = 0; i < MAX_ENEMIES; ++i)
         {
             if (enemies[i].isActive())
             {
                 enemies[i].update();
             }
-		}
+        }
+
+        // POWER-UP
+        if (powerUp.isActive())
+        {
+            powerUp.update();
+        }
+
+        // DURACION DOUBLE SHOT
+        if (doubleShotTimer > 0.0f)
+        {
+            doubleShotTimer -= GetFrameTime();
+
+            if (doubleShotTimer < 0.0f)
+            {
+                doubleShotTimer = 0.0f;
+            }
+        }
 
         CheckCollisions();
 
+        // DISPARO
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
         {
-            TraceLog(LOG_INFO,"Disparo");
-
             Shoot();
             PlaySound(sound);
 
             EventData data;
-            data.type ="onclick";
-            EventBus::get().fire("onclick",data);
+            data.type = "onclick";
+
+            EventBus::get().fire("onclick", data);
         }
 
+        // EVENTOS DE PRUEBA QUE YA TENIAS
         if (IsKeyPressed(KEY_C))
         {
             player.GrabCoin();
@@ -101,18 +180,27 @@ namespace skibidi
             player.PlayerHit();
         }
 
+        // REGRESO AL MENU
         if (IsKeyPressed(KEY_BACKSPACE))
         {
             SceneManager::get().changeScene("menu");
         }
-        if (IsKeyPressed(KEY_L))
+    }
+
+
+    bool Play::FireBullet(Vector2 position)
+    {
+        for (int i = 0; i < MAX_BULLETS; ++i)
         {
-            SceneManager::get().changeScene("loose");
-		}
-        if (IsKeyPressed(KEY_K))
-        {
-            SceneManager::get().changeScene("win");
-		}
+            if (!bullets[i].isActive())
+            {
+                bullets[i].fire(position);
+
+                return true;
+            }
+        }
+
+        return false;
     }
 
 
@@ -123,88 +211,167 @@ namespace skibidi
             return;
         }
 
-        for (int i = 0;i < MAX_BULLETS;++i)
-        {
-            if (!bullets[i].isActive())
-            {
-                bullets[i].fire(ship->getMuzzlePosition());
-                TraceLog(LOG_INFO,"Bullet %i activada",i);
+        Vector2 muzzle = ship->getMuzzlePosition();
 
-                return;
+        // POWER-UP ACTIVO
+        if (doubleShotTimer > 0.0f)
+        {
+            bool leftShot = FireBullet({muzzle.x - 18.0f,muzzle.y});
+            bool rightShot = FireBullet({muzzle.x + 18.0f,muzzle.y});
+
+            if (!leftShot && !rightShot)
+            {
+                TraceLog(LOG_WARNING, "Bullet Pool lleno");
             }
+
+            return;
         }
-        TraceLog(LOG_WARNING,"Bullet Pool lleno");
+
+        // DISPARO NORMAL
+        if (!FireBullet(muzzle))
+        {
+            TraceLog(LOG_WARNING, "Bullet Pool lleno");
+        }
     }
+
 
     void Play::CheckCollisions()
     {
-        for (int i = 0;i < MAX_BULLETS; i++)
+        // =========================================
+        // BALAS VS ENEMIGOS
+        // =========================================
+
+        for (int i = 0; i < MAX_BULLETS; ++i)
         {
-            if(bullets[i].active)
+            if (!bullets[i].isActive())
             {
-                for (int j = 0; j < MAX_ENEMIES; j++)
+                continue;
+            }
+
+            for (int j = 0; j < MAX_ENEMIES; ++j)
+            {
+                if (!enemies[j].isActive())
                 {
-                    if(enemies[j].active)
-                    {
-                        if(bullets[i].collidesWith(enemies[j]))
-                        {
-                            bullets[i].active = false;
-                            enemies[j].active = false;
-							score->addPoint();
-                            EventData data;
-                            data.type = "enemy_kill";
-                            EventBus::get().fire("enemy_kill",data);
-						}
-                    }
+                    continue;
                 }
-			}
-		}
-        for (int j = 0; j < MAX_ENEMIES; j++)
-        {
-            if(enemies[j].active)
-            {
-                if(ship->collidesWith(enemies[j]))
+
+                if (bullets[i].collidesWith(enemies[j]))
                 {
-                    enemies[j].active = false;
-					ship->setPosition(shipOrigin);
-					lives->shipKilled();
+                    Vector2 enemyPosition =
+                        enemies[j].getPosition();
+
+                    bullets[i].setActive(false);
+                    enemies[j].setActive(false);
+
+                    score->addPoint();
+
+                    // 30% de probabilidad de Power-Up.
+                    if (!powerUp.isActive() && GetRandomValue(1, 100) <= POWER_UP_DROP_CHANCE)
+                    {
+                        SpawnPowerUp(enemyPosition);
+                    }
+
                     EventData data;
-                    data.type = "player_kill";
-                    EventBus::get().fire("player_kill",data);
+                    data.type = "enemy_kill";
+
+                    EventBus::get().fire("enemy_kill", data);
+
+                    // Esta bala ya impacto.
+                    break;
                 }
             }
-		}
+        }
+
+
+        // =========================================
+        // ENEMIGOS VS JUGADOR
+        // =========================================
+
+        for (int j = 0; j < MAX_ENEMIES; ++j)
+        {
+            if (!enemies[j].isActive())
+            {
+                continue;
+            }
+
+            if (ship->collidesWith(enemies[j]))
+            {
+                enemies[j].setActive(false);
+
+                ship->setPosition(shipOrigin);
+
+                score->shipKilled();
+
+                EventData data;
+                data.type = "player_kill";
+
+                EventBus::get().fire("player_kill", data);
+            }
+        }
+
+
+        // =========================================
+        // POWER-UP VS JUGADOR
+        // =========================================
+
+        if (powerUp.isActive() &&ship-> collidesWith(powerUp))
+        {
+            powerUp.setActive(false);
+
+            doubleShotTimer =
+                DOUBLE_SHOT_DURATION;
+
+            TraceLog(LOG_INFO, "DOUBLE SHOT ACTIVADO");
+        }
     }
 
     void Play::SpawnEnemy()
     {
-        for (int i = 0;i < MAX_ENEMIES;++i)
+        for (int i = 0; i < MAX_ENEMIES; ++i)
         {
             if (!enemies[i].isActive())
             {
-                float x = GetRandomValue(50,GetScreenWidth() - 50);
-                enemies[i].setPosition(x,-50.0f);
+                float x = static_cast<float>(GetRandomValue(70, GetScreenWidth() - 70));
+
+                enemies[i].setPosition(x, -50.0f);
                 enemies[i].setActive(true);
-                TraceLog(LOG_INFO,"Enemy %i activado",i);
+
+                TraceLog(LOG_INFO,"Enemy %i activado", i);
+
                 return;
             }
         }
-		TraceLog(LOG_WARNING, "Enemy Pool lleno");
+
+        TraceLog(LOG_WARNING,"Enemy Pool lleno");
+    }
+
+    void Play::SpawnPowerUp(Vector2 position)
+    {
+        powerUp.spawn(position);
+
+        TraceLog(LOG_INFO,"PowerUp Double Shot generado");
     }
 
     void Play::Draw()
     {
-
+        // FONDO
         if (textureBG.id != 0)
         {
-            DrawTextureEx(textureBG,{0.0f,0.0f},0.0f,1.0f,WHITE);
+            DrawTextureEx(textureBG, { 0.0f, 0.0f }, 0.0f, 1.0f, WHITE);
+        }
+        // JUGADOR
+        entityMgr.draw();
+        // ENEMIGOS
+        for (int i = 0; i < MAX_ENEMIES; ++i)
+        {
+            if (enemies[i].isActive())
+            {
+                enemies[i].draw();
+            }
         }
 
-        entityMgr.draw();
-		score->draw();
-		lives->draw();
-
-        for (int i = 0;i < MAX_BULLETS;++i)
+        // BALAS
+        for (int i = 0; i < MAX_BULLETS; ++i)
         {
             if (bullets[i].isActive())
             {
@@ -212,12 +379,24 @@ namespace skibidi
             }
         }
 
-        DrawTextEx(font,"Space Game",{100.0f,100.0f},40.0f,0.0f,WHITE);
+        // POWER-UP
+        if (powerUp.isActive())
+        {
+            powerUp.draw();
+        }
+        // UN SOLO HUD
+        score->draw();
+        // POWER-UP ACTIVO
+        if (doubleShotTimer > 0.0f)
+        {
+            DrawTextEx(font, TextFormat("DOUBLE SHOT: %.1f", doubleShotTimer), { 20.0f, 85.0f }, 20.0f, 0.0f, GOLD);
+        }
 
-        DrawText("CLICK IZQUIERDO = DISPARAR",20,500,20,WHITE);
-
-        DrawText("BACKSPACE = Menu",20,560,18,WHITE);
+        DrawTextEx(font, "Space Game", { 100.0f, 100.0f }, 40.0f, 0.0f, WHITE);
+        DrawText("CLICK IZQUIERDO = DISPARAR", 20, 500, 20, WHITE);
+        DrawText("BACKSPACE = Menu", 20, 560, 18, WHITE);
     }
+
 
     void Play::OnExit()
     {
@@ -228,20 +407,20 @@ namespace skibidi
 
     void Play::onEvent(EventData data)
     {
-        if (data.type =="grab_coin")
+        if (data.type == "grab_coin")
         {
             playerScore++;
-            TraceLog(LOG_INFO,"Evento: grab_coin");
+            TraceLog(LOG_INFO, "Evento: grab_coin");
         }
 
-        else if (data.type =="enemy_hit")
+        else if (data.type == "enemy_hit")
         {
-            TraceLog(LOG_INFO,"Evento: enemy_hit");
+            TraceLog(LOG_INFO, "Evento: enemy_hit");
         }
 
-        else if (data.type =="player_hit")
+        else if (data.type == "player_hit")
         {
-            TraceLog(LOG_INFO,"Evento: player_hit");
+            TraceLog(LOG_INFO, "Evento: player_hit");
         }
     }
 }
